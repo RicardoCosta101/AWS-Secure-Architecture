@@ -1,0 +1,25 @@
+---
+
+- name: Nginx install
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Setup config for load balancing reverse proxy
+  ansible.builtin.copy:
+    src: files/reverse-config
+    dest: /etc/nginx/sites-enabled/reverse-config
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart nginx
+
+- name: Remove default config file
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Restart nginx
+
+- name: Run handlers
+  ansible.builtin.meta: flush_handlers

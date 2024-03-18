@@ -1,0 +1,19 @@
+---
+
+- hosts: proxy
+  become: true
+  gather_facts: yes
+  roles:
+    - squid
+
+- hosts: reverseproxy
+  become: true
+  gather_facts: false
+  roles:
+    - nginx
+
+- hosts: clients
+  become: true
+  gather_facts: false
+  roles:
+    - clients
